@@ -8,7 +8,7 @@ namespace PolicyAdmin.PolicyMS.API.Interface
 {
     public interface IPolicyRepository
     {
-        Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount, int agentId, int policyId);
+        Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount, string agentId, int policyId);
         Task<List<QuoteMaster>> GetQuotes(int businessValue, int propertyValue);
         Task<ConsumerPolicy> GetPolicy(int PolicyId, int CosumerId);
         Task<ResponseObject> IssuePolicy(int policyId, int consumerId, int businessId, Transaction tranasction);

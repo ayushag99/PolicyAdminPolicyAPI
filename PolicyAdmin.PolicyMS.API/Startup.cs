@@ -32,15 +32,15 @@ namespace PolicyAdmin.PolicyMS.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            if (Configuration.GetValue<bool>("InMemoryDatabase"))
-            {
-                services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
+            //if (Configuration.GetValue<bool>("InMemoryDatabase"))
+            //{
+            //    services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 services.AddDbContext<PolicyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
-            }
+            //}
 
             services.AddTransient<IDBService, DBService>();
             services.AddTransient<IQuotesService, QuotesService>();

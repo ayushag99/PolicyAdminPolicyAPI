@@ -10,7 +10,7 @@ namespace PolicyAdmin.PolicyMS.API.Models
         public int consumerId { get; set; }
         public int propertyId { get; set; }
         public int amount { get; set; }
-        public int agentId { get; set; }
+        public string agentId { get; set; }
         public int policyMasterId { get; set; }
     }
 }

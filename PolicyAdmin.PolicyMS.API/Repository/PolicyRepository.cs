@@ -37,7 +37,7 @@ namespace PolicyAdmin.PolicyMS.API.Repository
             return _dbService.getPolicy(PolicyId);
         }
 
-        public async Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount,int agentId,int policyId)
+        public async Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount,string agentId,int policyId)
         {
             ResponseObject responseobject = new ResponseObject { Success = true ,Message=new List<String>(){ } };
             Consumer consumer = _consumerService.GetConsumer(consumerId);
