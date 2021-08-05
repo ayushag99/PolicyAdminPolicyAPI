@@ -51,10 +51,10 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
 
 
         [HttpGet]
-        public async Task<ConsumerPolicy> GetPolicy(int PolicyId, int ConsumerId)
+        public async Task<object> GetPolicy(int PolicyId, int ConsumerId)
         {
-            ConsumerPolicy consumerPolicy = await _policyrepo.GetPolicy(PolicyId, ConsumerId);
-            return consumerPolicy;
+            var resaponse = await _policyrepo.GetPolicy(PolicyId, ConsumerId);
+            return resaponse;
         }
     }
 }

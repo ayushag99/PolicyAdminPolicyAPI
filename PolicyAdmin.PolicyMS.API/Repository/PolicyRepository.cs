@@ -32,9 +32,25 @@ namespace PolicyAdmin.PolicyMS.API.Repository
         //    //List<QuoteMaster> quotes = await _quotesService.GetQuotesForPolicy(policyMaster);
         //    return policyMaster;
         //}
-        public async Task<ConsumerPolicy> GetPolicy(int PolicyId, int CosumerId)
+        //}
+        public async Task<object> GetPolicy(int PolicyId, int ConsumerId)
         {
-            return _dbService.getPolicy(PolicyId);
+            ResponseObject responseObject = new ResponseObject { Success = true, Message = new List<String>() };
+            ConsumerPolicy policy = _dbService.getPolicy(PolicyId);
+            if (policy == null)
+            {
+                responseObject.Success = false;
+                responseObject.Message.Add("No policy foudn with this policy Id");
+            }
+            if(policy.ConsumerId!=ConsumerId)
+            {
+                responseObject.Success = false;
+                responseObject.Message.Add("This policy does not belong to this consumer.");
+            }
+            if (!responseObject.Success)
+                return responseObject;
+            return policy;
+
         }
 
         public async Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount,string agentId,int policyId)

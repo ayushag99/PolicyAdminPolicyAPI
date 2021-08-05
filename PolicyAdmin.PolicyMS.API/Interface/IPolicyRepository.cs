@@ -10,7 +10,7 @@ namespace PolicyAdmin.PolicyMS.API.Interface
     {
         Task<ResponseObject> CreatePolicy(int consumerId, int propertyId, int amount, string agentId, int policyId);
         Task<List<QuoteMaster>> GetQuotes(int businessValue, int propertyValue);
-        Task<ConsumerPolicy> GetPolicy(int PolicyId, int CosumerId);
+        Task<object> GetPolicy(int PolicyId, int CosumerId);
         Task<ResponseObject> IssuePolicy(int policyId, int consumerId, int businessId, Transaction tranasction);
         Task<object> GetPolicyMaster(int ConsumerId, int PropertyId);
     }

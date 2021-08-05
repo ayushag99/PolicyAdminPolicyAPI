@@ -43,6 +43,8 @@ namespace PolicyAdmin.PolicyMS.API.Services
         public ConsumerPolicy getPolicy(int policyId)
         {
             ConsumerPolicy policy = _context.ConsumerPolicies.FirstOrDefault(policy => policy.Id == policyId);
+            if (policy==null)
+                    return null;
             if (policy.TransactionID > 0)
             {
                 policy.PaymentDetails = _context.Transactions.Find(policy.TransactionID);
