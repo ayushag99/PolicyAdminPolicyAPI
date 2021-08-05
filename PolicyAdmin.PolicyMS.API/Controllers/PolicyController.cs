@@ -20,6 +20,14 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
             _policyrepo = policyrepo;
         }
 
+        [HttpGet]
+        public async Task<object> GetPolicyMaster( int ConsumerId, int PropertyId)
+        {
+            object responseObject = await _policyrepo.GetPolicyMaster(ConsumerId, PropertyId);
+            return responseObject;
+        }
+
+
         // GET: api/<PolicyController>
         [HttpGet]
         public async Task<List<QuoteMaster>> GetQuotes(int businessValue, int propertyValue)
@@ -27,12 +35,7 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
             List<QuoteMaster>  quotes = await _policyrepo.GetQuotes(businessValue, propertyValue);
             return quotes;
         }// GET: api/<PolicyController>
-        [HttpGet]
-        public async Task<ConsumerPolicy> GetPolicy(int PolicyId, int ConsumerId)
-        {
-            ConsumerPolicy  consumerPolicy = await _policyrepo.GetPolicy(PolicyId, ConsumerId);
-            return consumerPolicy;
-        }
+        
         [HttpPost]
         public async Task<ResponseObject> CreatePolicy(InputCreatePolicy input)
         {
@@ -47,5 +50,11 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<ConsumerPolicy> GetPolicy(int PolicyId, int ConsumerId)
+        {
+            ConsumerPolicy consumerPolicy = await _policyrepo.GetPolicy(PolicyId, ConsumerId);
+            return consumerPolicy;
+        }
     }
 }

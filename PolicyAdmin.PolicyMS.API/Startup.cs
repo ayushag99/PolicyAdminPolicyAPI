@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PolicyAdmin.PolicyMS.API.DataSeeding;
 using PolicyAdmin.PolicyMS.API.DBContext;
@@ -15,6 +17,7 @@ using PolicyAdmin.PolicyMS.API.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PolicyAdmin.PolicyMS.API
@@ -32,15 +35,39 @@ namespace PolicyAdmin.PolicyMS.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //if (Configuration.GetValue<bool>("InMemoryDatabase"))
-            //{
-            //    services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
+            if (Configuration.GetValue<bool>("InMemoryDatabase"))
+            {
+                services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
 
-            //}
-            //else
-            //{
+            }
+            else
+            {
                 services.AddDbContext<PolicyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
-            //}
+            }
+
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]))
+                    };
+                });
+            services.AddCors(c => c.AddPolicy("POD_1_Policy", builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            }));
+
 
             services.AddTransient<IDBService, DBService>();
             services.AddTransient<IQuotesService, QuotesService>();
@@ -71,6 +98,7 @@ namespace PolicyAdmin.PolicyMS.API
 
             }
             app.UseRouting();
+            app.UseCors("POD_1_Policy");
 
             app.UseAuthorization();
 

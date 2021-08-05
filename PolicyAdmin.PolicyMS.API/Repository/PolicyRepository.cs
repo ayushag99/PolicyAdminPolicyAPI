@@ -127,6 +127,46 @@ namespace PolicyAdmin.PolicyMS.API.Repository
         }
 
 
+        public async Task<object> GetPolicyMaster(int ConsumerId, int PropertyId)
+        {
+            ResponseObject responseobject = new ResponseObject { Success = true, Message = new List<String>() { } };
+            Consumer consumer = _consumerService.GetConsumer(ConsumerId);
+            Property property = _consumerService.GetProperty(PropertyId);
+            if (consumer == null)
+            {
+                responseobject.Success = false;
+                responseobject.Message.Add("incorrect consumer id");
+            }
+            if (property == null)
+            {
+                responseobject.Success = false;
+                responseobject.Message.Add("incorrect property id");
+            }
+
+            if (consumer != null && property != null && consumer.BusinessId != property.BusinesssId)
+            {
+                responseobject.Success = false;
+                responseobject.Message.Add("this property does not belong to this business. policy creation failed.");
+            }
+
+            if (responseobject.Success == false)
+                return responseobject;
+
+            int businessValue = calculateBusinessValue(consumer.Business);
+            int propertyValue = calculatePropertyValue(property);
+
+            PolicyMaster policyMaster = _dbService.GetPolicyMaster(businessValue, propertyValue);
+            if (policyMaster == null)
+            { 
+                responseobject.Success = false;
+                responseobject.Message.Add("No appropriate policy found for your business.");
+            }
+            return policyMaster;
+
+
+    }
+
+
         public int calculateBusinessValue(Business business)
         {
             double annaulTurnover = business.AnnualTurnOver;

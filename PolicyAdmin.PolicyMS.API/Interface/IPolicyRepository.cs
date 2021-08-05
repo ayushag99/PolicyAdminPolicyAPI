@@ -12,5 +12,6 @@ namespace PolicyAdmin.PolicyMS.API.Interface
         Task<List<QuoteMaster>> GetQuotes(int businessValue, int propertyValue);
         Task<ConsumerPolicy> GetPolicy(int PolicyId, int CosumerId);
         Task<ResponseObject> IssuePolicy(int policyId, int consumerId, int businessId, Transaction tranasction);
+        Task<object> GetPolicyMaster(int ConsumerId, int PropertyId);
     }
 }
