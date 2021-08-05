@@ -22,11 +22,11 @@ namespace PolicyAdmin.PolicyMS.API.Models
 
         [Required]
         [Range(0, 10)]
-        public int BusinesssValueRangeFrom { get; set; }
+        public int BusinessValueRangeFrom { get; set; }
 
         [Required]
         [Range(0, 10)]
-        public int BusinesssValueRangeTo { get; set; }
+        public int BusinessValueRangeTo { get; set; }
 
         [Required]
         public PropertyType PropertyType { get; set; }

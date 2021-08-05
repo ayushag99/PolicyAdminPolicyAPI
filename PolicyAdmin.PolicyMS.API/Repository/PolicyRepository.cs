@@ -53,7 +53,7 @@ namespace PolicyAdmin.PolicyMS.API.Repository
                 responseobject.Message.Add("incorrect property id");
             }
 
-            if (consumer != null && property != null && consumer.BusinessId != property.BusinesssId)
+            if (consumer != null && property != null && consumer.BusinessId != property.BusinessId)
             {
                 responseobject.Success = false;
                 responseobject.Message.Add("this property does not belong to this business. policy creation failed.");
@@ -143,7 +143,7 @@ namespace PolicyAdmin.PolicyMS.API.Repository
                 responseobject.Message.Add("incorrect property id");
             }
 
-            if (consumer != null && property != null && consumer.BusinessId != property.BusinesssId)
+            if (consumer != null && property != null && consumer.BusinessId != property.BusinessId)
             {
                 responseobject.Success = false;
                 responseobject.Message.Add("this property does not belong to this business. policy creation failed.");
