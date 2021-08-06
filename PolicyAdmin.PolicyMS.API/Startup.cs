@@ -88,6 +88,7 @@ namespace PolicyAdmin.PolicyMS.API
             services.AddTransient<IQuotesService, QuotesService>();
             services.AddTransient<IConsumerService, ConsumerService>();
             services.AddTransient<IPolicyRepository, PolicyRepository>();
+            services.AddScoped<IAuthenticationManager, AuthenticationRepo>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

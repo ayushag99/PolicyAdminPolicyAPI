@@ -15,8 +15,10 @@ namespace PolicyAdmin.PolicyMS.API.Services
     public class QuotesService : IQuotesService
     {
         private readonly IConfiguration _configuration;
-        public QuotesService(IConfiguration configuration)
+        private readonly IAuthenticationManager _auth;
+        public QuotesService(IConfiguration configuration, IAuthenticationManager auth)
         {
+            _auth = auth;
             _configuration = configuration;
         }
         
@@ -26,6 +28,7 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("QuotesAPI"));
                 client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer",_auth.AuthToken.Split(" ")[1]);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();
                 //_log4net.Debug("Connecting with PensionDetails");

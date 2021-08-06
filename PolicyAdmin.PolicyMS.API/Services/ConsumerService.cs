@@ -14,8 +14,11 @@ namespace PolicyAdmin.PolicyMS.API.Services
     public class ConsumerService : IConsumerService
     {
         private readonly IConfiguration _configuration;
-        public ConsumerService(IConfiguration configuration)
+        private readonly IAuthenticationManager _auth;
+
+        public ConsumerService(IConfiguration configuration, IAuthenticationManager auth)
         {
+            _auth = auth;
             _configuration = configuration;
         }
         public Consumer GetConsumer(int consumerId)
@@ -24,6 +27,8 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("ConsumerAPI"));
                 client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken.Split(" ")[1]);
+
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();
                 //_log4net.Debug("Connecting with PensionDetails");
@@ -57,6 +62,8 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("ConsumerAPI"));
                 client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken.Split(" ")[1]);
+
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();
                 //_log4net.Debug("Connecting with PensionDetails");
