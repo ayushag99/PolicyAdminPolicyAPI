@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PolicyAdmin.PolicyMS.API.Interface;
 using PolicyAdmin.PolicyMS.API.Models;
 using System;
@@ -15,6 +16,8 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
     public class PolicyController : ControllerBase
     {
         private readonly IPolicyRepository _policyrepo;
+        static readonly log4net.ILog _log4net = log4net.LogManager.GetLogger("RollingFile");
+
         public PolicyController(IPolicyRepository policyrepo)
         {
             _policyrepo = policyrepo;
@@ -39,13 +42,50 @@ namespace PolicyAdmin.PolicyMS.API.Controllers
         [HttpPost]
         public async Task<ResponseObject> CreatePolicy(InputCreatePolicy input)
         {
-            ResponseObject responseObject = await _policyrepo.CreatePolicy(input.consumerId,input.propertyId,input.amount, input.agentId, input.policyMasterId);
+            ResponseObject responseObject;
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                responseObject = new ResponseObject { Success = false};
+                responseObject.Message = (List<string>)ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return responseObject;
+            }
+            
+            try
+            {
+                responseObject = await _policyrepo.CreatePolicy(input.consumerId, input.propertyId, input.amount, input.agentId, input.policyMasterId);
+                
+            }catch(Exception e)
+            {
+                responseObject = new ResponseObject { Success = false, Message = { "Something Went Wrong"} };
+                _log4net.Error(e.Message);
+                return responseObject;
+            }
             return responseObject;
         }
         [HttpPost]
         public async Task<ResponseObject> IssuePolicy(InputIssuePolicy input)
         {
-            ResponseObject responseObject = await _policyrepo.IssuePolicy(input.PolicyId,input.ConsuemrId, input.BusinessId, input.PaymentDetails);
+            ResponseObject responseObject;
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                responseObject = new ResponseObject { Success = false };
+                responseObject.Message = (List<string>)ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return responseObject;
+            }
+
+            try
+            {
+
+                responseObject = await _policyrepo.IssuePolicy(input.PolicyId,input.ConsuemrId, input.BusinessId, input.PaymentDetails);
+            }
+            catch (Exception e)
+            {
+                responseObject = new ResponseObject { Success = false, Message = { "Something Went Wrong" } };
+                _log4net.Error(e.Message);
+                return responseObject;
+            }
             return responseObject;
         }
 

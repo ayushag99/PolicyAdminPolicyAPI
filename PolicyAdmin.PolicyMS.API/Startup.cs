@@ -24,9 +24,12 @@ namespace PolicyAdmin.PolicyMS.API
 {
     public class Startup
     {
+        static readonly log4net.ILog _log4net = log4net.LogManager.GetLogger("RollingFile");
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _log4net.Info("Initializing Program");
         }
 
         public IConfiguration Configuration { get; }
@@ -38,11 +41,23 @@ namespace PolicyAdmin.PolicyMS.API
             if (Configuration.GetValue<bool>("InMemoryDatabase"))
             {
                 services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
+                _log4net.Info("Initialized In-Memory DB");
+
 
             }
             else
             {
-                services.AddDbContext<PolicyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+                try
+                {
+                    services.AddDbContext<PolicyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+                    _log4net.Info("Initialized SQL DB");
+                }
+                catch (Exception e)
+                {
+                    _log4net.Error("Error In Connection to Databse : " + e.Message);
+                    services.AddDbContext<PolicyContext>(options => options.UseInMemoryDatabase("PolicyAdmin_Policy"));
+                    _log4net.Info("Initialized In-Memory DB due to error while initializing SQL Server.");
+                }
             }
 
 
@@ -92,9 +107,22 @@ namespace PolicyAdmin.PolicyMS.API
             }
             if (Configuration.GetValue<bool>("inmemorydatabase"))
             {
-                var scopeeee = app.ApplicationServices.CreateScope();
-                var context = scopeeee.ServiceProvider.GetRequiredService<PolicyContext>();
-                DataGeneratorPolicyMaster.Initialize(context);
+                try
+                {
+                    _log4net.Info("Data Seding for In-Memory DB Started");
+
+                    var scopeeee = app.ApplicationServices.CreateScope();
+                    var context = scopeeee.ServiceProvider.GetRequiredService<PolicyContext>();
+                    DataGeneratorPolicyMaster.Initialize(context);
+                    _log4net.Info("Data Seding for In-Memory DB Completed");
+
+                }catch(Exception e)
+                {
+                    _log4net.Error("Exception in Data Seeding: " + e.Message);
+
+                }
+
+
 
             }
             app.UseRouting();
