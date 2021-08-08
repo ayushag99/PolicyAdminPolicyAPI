@@ -1,0 +1,36 @@
+﻿---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policyapi
+  template:
+    metadata:
+      labels:
+        app: policyapi
+    spec: 
+      imagePullSecrets:
+      - name: ayush
+      containers:
+      - name: policy-container
+        image: policyadminpolicyapiacr.azurecr.io/policyadminpolicy:latest
+        imagePullPolicy: Always
+        env:
+        ports:
+        - containerPort: 80
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-deployment
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: policyapi

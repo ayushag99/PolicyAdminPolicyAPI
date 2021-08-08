@@ -28,7 +28,7 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("QuotesAPI"));
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer",_auth.AuthToken.Split(" ")[1]);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer",_auth.AuthToken);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();
                 //_log4net.Debug("Connecting with PensionDetails");

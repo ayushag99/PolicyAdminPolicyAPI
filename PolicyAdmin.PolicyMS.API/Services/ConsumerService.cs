@@ -27,7 +27,7 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("ConsumerAPI"));
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken.Split(" ")[1]);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken);
 
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();
@@ -62,7 +62,7 @@ namespace PolicyAdmin.PolicyMS.API.Services
             {
                 client.BaseAddress = new Uri(_configuration.GetConnectionString("ConsumerAPI"));
                 client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken.Split(" ")[1]);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.AuthToken);
 
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 HttpResponseMessage response = new HttpResponseMessage();

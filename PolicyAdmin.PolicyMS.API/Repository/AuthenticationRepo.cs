@@ -10,6 +10,25 @@ namespace PolicyAdmin.PolicyMS.API.Repository
 {
     public class AuthenticationRepo : IAuthenticationManager
     {
-        public string AuthToken { get ; set ; }
+        private string _authToken;
+        public string AuthToken {
+            get
+            {
+                return this._authToken;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._authToken = "";
+                }
+                else
+                {
+                    this._authToken = value.Split(" ")[1];
+                }
+            }
+        }
+
+        
     }
 }
